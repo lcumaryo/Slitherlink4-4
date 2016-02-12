@@ -6,128 +6,45 @@ print('Welcome to the SlitherLink ',M,'*',N,'!')
 
 #DEFINITION BEGIN
 
-numbers = {}    #DICTIONARY
-
-while True:     #DEF3
-    print('Please enter the x-coordinate of a figure "3". Or enter "q" to go next step.')
-    
-    i = input("")
-    
-    if i == "q":
-        break
-    
-    elif 0 <= int(i) <= M:
-        
-        x = int(i)
-        
-        print('Please enter the y-coordinate of the figure.')
-        
-        i = input("")
-        
-        if 0 <= int(i) <=  N:
-            y = int(i)
-            def number(x,y):
-                return 3
-            numbers[x,y] = 3
-            print('(',x,',',y,') = ',number(x,y))
-
-        else:
-            print('You entered a wrong number.It must be 0 to ',N,'.')
-
-    else:
-        print('You entered a wrong number.It must be 0 to ',M,'.')
-
-
-while True:     #DEF2
-    print('Please enter the x-coordinate of a figure "2". Or enter "q" to go next step.')
-    
-    i = input("")
-    
-    if i == "q":
-        break
-    
-    elif 0 <= int(i) <= M:
-        
-        x = int(i)
-        
-        print('Please enter the y-coordinate of the figure.')
-        
-        i = input("")
-        
-        if 0 <= int(i) <=  N:
-            y = int(i)
-            def number(x,y):
-                return 2
-            numbers[x,y] = 2
-            print('(',x,',',y,') = ',number(x,y))
-
-        else:
-            print('You entered a wrong number.It must be 0 to ',N,'.')
-
-    else:
-        print('You entered a wrong number.It must be 0 to ',M,'.')
-
-while True:     #DEF1
-    print('Please enter the x-coordinate of a figure "1". Or enter "q" to go next step.')
-    
-    i = input("")
-    
-    if i == "q":
-        break
-    
-    elif 0 <= int(i) <= M:
-        
-        x = int(i)
-        
-        print('Please enter the y-coordinate of the figure.')
-        
-        i = input("")
-        
-        if 0 <= int(i) <=  N:
-            y = int(i)
-            def number(x,y):
-                return 1
-            numbers[x,y] = 1
-            print('(',x,',',y,') = ',number(x,y))
-
-        else:
-            print('You entered a wrong number.It must be 0 to ',N,'.')
-
-    else:
-        print('You entered a wrong number.It must be 0 to ',M,'.')
-
-while True:     #DEF0
-    print('Please enter the x-coordinate of a figure "0". Or enter "q" to go next step.')
-    
-    i = input("")
-    
-    if i == "q":
-        break
-    
-    elif 0 <= int(i) <= M:
-        
-        x = int(i)
-        
-        print('Please enter the y-coordinate of the figure.')
-        
-        i = input("")
-        
-        if 0 <= int(i) <=  N:
-            y = int(i)
-            def number(x,y):
-                return 0
-            numbers[x,y] = 0
-            print('(',x,',',y,') = ',number(x,y))
-
-        else:
-            print('You entered a wrong number.It must be 0 to ',N,'.')
-
-    else:
-        print('You entered a wrong number.It must be 0 to ',M,'.')
 
 col=[[1 for i in range(N)] for j in range(M+1)]
 
 row=[[1 for i in range(N+1)] for j in range(M)]
+
+
+numbers = {}    #DICTIONARY
+
+for n in range(4):  #DEFINE NUMBERS 0~3
+
+    while True:     
+        print('Please enter the x-coordinate of a figure "',n,'". Or enter "q" to go next step.')
+    
+        i = input("")
+    
+        if i == "q":
+            break
+    
+        elif 0 <= int(i) <= M:
+        
+            x = int(i)
+        
+            print('Please enter the y-coordinate of the figure.')
+        
+            i = int(input())
+        
+            if 0 <= i <=  N:
+
+                y = i
+
+                numbers[x,y] = n
+
+                print('(',x,',',y,') = ',n)
+
+            else:
+                print('You entered a wrong number.It must be 0 to ',N,'.')
+
+        else:
+            print('You entered a wrong number.It must be 0 to ',M,'.')
 
 #DEFINITION END
 

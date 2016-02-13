@@ -52,15 +52,23 @@ keys = list(numbers.keys())
 
 values = list(numbers.values())
 
+judge_col = {}
+
+judge_row = {}
+
 def judge_zero(tuple):
     s = tuple[0]
     t = tuple[1]
-    return s,t
+    judge_col[(s,t)] = False
+    judge_col[(s,t+1)] = False
+    judge_row[(s,t)] = False
+    judge_row[(s+1,t)] = False
 
 for i in range(len(values)):
     if values[i] == 0:
         judge_zero(keys[i])
-        
+
+
 
 #SOLVE BEGIN
 

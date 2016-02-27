@@ -2,26 +2,21 @@
 M=4
 N=4
 
-print('Welcome to the SlitherLink ',M,'*',N,'!')
-
-#DEFINITION BEGIN
-
-
+#行、列の線の有無を表すリストにすべて１を代入
 col=[[1 for i in range(N)] for j in range(M+1)]
-
 row=[[1 for i in range(N+1)] for j in range(M)]
 
-
-numbers = {}    #DICTIONARY
+numbers = {}    #中の数字の辞書を定義
 
 for s in range(M):
     for t in range(N):
-        numbers[(s,t)] = False
+        numbers[(s,t)] = True
 
-for n in range(4):  #DEFINE NUMBERS 0~3
+#0~3の数字の座標を入力させる
+for n in range(4):
 
     while True:     
-        print('Please enter the x-coordinate of a figure "',n,'". Or enter "q" to go next step.')
+        print(n,'のX座標を入力して下さい。無い場合はQキーを入力して下さい。')
     
         i = input("")
     
@@ -32,7 +27,7 @@ for n in range(4):  #DEFINE NUMBERS 0~3
         
             x = int(i)
         
-            print('Please enter the y-coordinate of the figure.')
+            print('Y座標を入力して下さい。')
         
             i = int(input())
         
@@ -45,150 +40,126 @@ for n in range(4):  #DEFINE NUMBERS 0~3
                 print('(',x,',',y,') = ',n)
 
             else:
-                print('You entered a wrong number.It must be 0 to ',N,'.')
+                print('数値が正しくありません。')
 
         else:
-            print('You entered a wrong number.It must be 0 to ',M,'.')
+            print('数値が正しくありません。')
 
-#DEFINITION END
+keys = list(numbers.keys())     #座標のリスト
 
-keys = list(numbers.keys())     #KEY LIST
+values = list(numbers.values())     #数字のリスト
 
-values = list(numbers.values())     #VALUE LIST
-
-judge_col = {}
-
+#辺に線が引けるか引けないかを表す辞書
+judge_col = {}  
 judge_row = {}
 
+#0の周りをFalseにする関数
 def judge_zero(tuple):
 
     s = tuple[0]
-
     t = tuple[1]
 
     judge_col[(s,t)] = False
-
     judge_col[(s,t+1)] = False
-
     judge_row[(s,t)] = False
-
     judge_row[(s+1,t)] = False
 
+#すべての0について判定し辺にFalseを代入
 for i in range(len(values)):
 
-    if values[i] == 0:      #最後に０を判定
+    if values[i] == 0:
         judge_zero(keys[i])
 
-    if values[i] == 3:              #数字が３で
-        if numbers[(keys[i][0]+1,keys[i][1])] == 3:     #右が3ならば
-            judge_row[(keys[i][0],keys[i][1])] == True
-            judge_row[(keys[i][0]+1,keys[i][1])] == True
-            judge_row[(keys[i][0]+2,keys[i][1])] == True
-            judge_row[(keys[i][0]+1,keys[i][1]+1)] == False
-            judge_row[(keys[i][0]+1,keys[i][1]-1)] == False
+#線を上下左右に引く関数
+def line_up(s,t):
+    if s>N-1 or t>M:
+        return False
+    if (judge_row[(s,t)] == True) and (row[s][t] == 0):
+        row[s][t] = 1
+        return True
+    else:
+        return False
 
-        if numbers[(keys[i][0]+1,keys[i][1]+1)] == 3:   #右上が3ならば
-            judge_col[(keys[i][0],keys[i][1])] == True
-            judge_col[(keys[i][0]+1,keys[i][1]+2)] == True
-            judge_row[(keys[i][0],keys[i][1])] == True
-            judge_row[(keys[i][0]+2,keys[i][1]+1)] == True
+def line_right(s,t):
+    if s>N or t>M-1:
+        return False
+    if (judge_col[(s,t)] == True) and (col[s][t] == 0):
+        col[s][t] = 1
+        return True
+    else:
+        return False
 
-        if numbers[(keys[i][0],keys[i][1]+1)] == 3:     #上が3ならば
-            judge_col[(keys[i][0],keys[i][1])] == True
-            judge_col[(keys[i][0],keys[i][1]+1)] == True
-            judge_col[(keys[i][0],keys[i][1]+2)] == True
-            judge_col[(keys[i][0]+1,keys[i][1]+1)] == False
-            judge_col[(keys[i][0]-1,keys[i][1]+1)] == False
+def line_down(s,t):
+    if 1>s or s>N or t>M:
+        return False
+    if (judge_row[(s-1,t)] == True) and (row[s-1][t] == 0):
+        row[s-1][t] = 1
+        return True
+    else:
+        return False
 
-        if numbers[(keys[i][0]-1,keys[i][1]+1)] == 3:   #左上が3ならば
-            judge_col[(keys[i][0],keys[i][1])] == True
-            judge_col[(keys[i][0]-1,keys[i][1]+2)] == True
-            judge_row[(keys[i][0]+1,keys[i][1])] == True
-            judge_row[(keys[i][0]-2,keys[i][1]+1)] == True
+def line_left(s,t):
+    if s>N or t>M:
+        return False
+    if (judge_col[(s,t-1)] == True) and (col[s][t-1] == 0):
+        col[s][t-1] = 1
+        return True
+    else:
+        return False
 
-        if numbers[(keys[i][0]-1,keys[i][1])] == 3:     #左が3ならば
-            judge_row[(keys[i][0],keys[i][1])] == True
-            judge_row[(keys[i][0]+1,keys[i][1])] == True
-            judge_row[(keys[i][0]-1,keys[i][1])] == True
-            judge_row[(keys[i][0],keys[i][1]+1)] == False
-            judge_row[(keys[i][0],keys[i][1]-1)] == False
-
-        if numbers[(keys[i][0]-1,keys[i][1]-1)] == 3:   #左下が3ならば
-            judge_col[(keys[i][0],keys[i][1]+1)] == True
-            judge_col[(keys[i][0]-1,keys[i][1]-1)] == True
-            judge_row[(keys[i][0]+1,keys[i][1])] == True
-            judge_row[(keys[i][0]-1,keys[i][1]-1)] == True
-
-        if numbers[(keys[i][0],keys[i][1]-1)] == 3:     #下が3ならば
-            judge_col[(keys[i][0],keys[i][1])] == True
-            judge_col[(keys[i][0],keys[i][1]+1)] == True
-            judge_col[(keys[i][0],keys[i][1]-1)] == True
-            judge_col[(keys[i][0]+1,keys[i][1])] == False
-            judge_col[(keys[i][0]-1,keys[i][1])] == False
-          
-        if numbers[(keys[i][0]+1,keys[i][1]-1)] == 3:   #右下が3ならば
-            judge_col[(keys[i][0],keys[i][1]+1)] == True
-            judge_col[(keys[i][0]+1,keys[i][1])] == True
-            judge_row[(keys[i][0],keys[i][1])] == True
-            judge_row[(keys[i][0]+2,keys[i][1]-1)] == True
-
+#どこの点にもすすめなくなった時に１つ前の点の座標を返す関数
+def line_pre_false(s,t):
+    if col[s][t] == 1:
+        judge_col[(s,t)] = False
+        return (s,t+1)
+    elif col[s][t-1] == 1:
+        judge_col[(s,t-1)] = False
+        return (s,t-1)
+    elif row[s][t] == 1:
+        judge_row[(s,t)] = False
+        return (s+1,t)
+    elif row[s-1][t] ==1:
+        judge_row[(s-1,t)] = False
+        return (s-1,t)
+    else:
+        print("error")
+    
+#ある点について線を上、右、下、左の順に引けるか試していく関数
+def line_main(x,y):
+    if line_up(x,y):
+        print(col,row)
+        print()
+        return (x+1,y)
+    if line_right(x,y):
+        print(col,row)
+        print()
+        return (x,y+1)
+    if line_down(x,y):
+        print(col,row)
+        print()
+        return (x-1,y)
+    if line_left(x,y):
+        print(col,row)
+        print()
+        return (x,y-1)
+    else:
+        return False
         
-    elif values[i] == max(values):
-        P = keys[i]
-
-#最後に定義されていない線をすべてFalseにする予定
-
-#SOLVE BEGIN
-
-#(x1,y1)から(x2,y2)に移動した
-
-x1 = 1
-
-y1 = 1
-
-x2 = 1
-
-y2 = 2
+    
+#再帰定義によって次々に線を引いていく関数
+def line_all(x,y):
+    tmp = line_main(x,y)
+    if allink(N,M):
+            return
+    if tmp == False:
+        (x1,y1) = line_pre_false(x,y)
+        line_all(x1,y1)
+    else:
+        (x2,y2) = tmp
+        line_all(x2,y2)
 
 
-
-if x2 - x1 == 1: #右に移動した
-    if numbers[(x1,y1)] == 1:
-        if judge_col[(x1,y1+1)] == True or judge_row[(x1,y1)] == True or judge_row[(x1+1,y1)] == True:
-            judge_col[(x1,y1)] == False
-    if y1 != 0:
-        if numbers[(x1,y1-1)] == 1:
-            if judge_col[(x1,y1-1)] == True or judge_row[(x1,y1-1)] == True or judge_row[(x1+1,y1-1)] == True:
-                judge_col[(x1,y1)] == False
-
-if x1 - x2 == 1: #左に移動した
-    if numbers[(x1-1,y1)] == 1:
-        if judge_col[(x1-1,y1+1)] == True or judge_row[(x1,y1)] == True or judge_row[(x1-1,y1)] == True:
-            judge_col[(x1-1,y1)] == False
-    if y1 != 0:
-        if numbers[(x1-1,y1-1)] == 1:
-            if judge_col[(x1-1,y1-1)] == True or judge_row[(x1-1,y1-1)] == True or judge_row[(x1,y1-1)] == True:
-                judge_col[(x1-1,y1)] == False
-
-if y2 - y1 == 1: #上に移動した
-    if numbers[(x1,y1)] == 1:
-        if judge_col[(x1,y1)] == True or judge_col[(x1,y1+1)] == True or judge_row[(x1+1,y1)] == True:
-            judge_row[(x1,y1)] == False
-    if x1 != 0:
-        if numbers[(x1-1,y1)] == 1:
-            if judge_col[(x1,y1)] == True or judge_col[(x1,y1+1)] == True or judge_row[(x1,y1)] == True:
-                judge_row[(x1,y1)] == False
-
-if y1 - y2 == 1: #下に移動した
-    if numbers[(x1,y1-1)] == 1:
-        if judge_col[(x1,y1-1)] == True or judge_col[(x1,y1)] == True or judge_row[(x1+1,y1-1)] == True:
-            judge_row[(x1,y1-1)] == False
-    if x1 != 0:
-        if numbers[(x1-1,y1-1)] == 1:
-            if judge_col[(x1-1,y1)] == True or judge_col[(x1-1,y1-1)] == True or judge_row[(x1-1,y1-1)] == True:
-                judge_row[(x1,y1-1)] == False
-
-
+#全部の線がつながっているか確認（再帰関数の終了条件）        
 def link(s,t):
     if s<N and t<M:
         c=col[s][t]+col[s][t-1]+row[s][t]+row[s-1][t]
@@ -203,12 +174,16 @@ def link(s,t):
         return True
     else:
         return False
-
+        
 def allink(s,t):
     for i in range(s):
         for j in range(t):
             if link(i,j)==False:
                 return False
+
+print(col,row)
+print()
+line_all(0,0)
 
 def solved(a):
     if a==None:
@@ -216,5 +191,6 @@ def solved(a):
         print(row)
     else:
         print("unsolved")
+
 
 solved(allink(N+1,M+1))
